@@ -46,9 +46,10 @@
 {% if not thread.is_locked %}
 <section class="postform">
   <h2>Reply</h2>
+  {% if error %}<p class="form-error">{{ error }}</p>{% endif %}
   <form action="/thread/{{ thread.id }}/reply" method="post" enctype="multipart/form-data">
-    <label>Name <input type="text" name="name" maxlength="50" placeholder="Anonymous"></label>
-    <textarea name="body" rows="4" placeholder="Reply (>>123 to quote)"></textarea>
+    <label>Name <input type="text" name="name" maxlength="50" placeholder="Anonymous" value="{{ form.name if form else '' }}"></label>
+    <textarea name="body" rows="4" placeholder="Reply (>>123 to quote)">{{ form.body if form else '' }}</textarea>
     <label>Image <input type="file" name="image" accept="image/*"></label>
     <button type="submit">Reply</button>
   </form>

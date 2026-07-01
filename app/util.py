@@ -105,3 +105,17 @@ def parse_quotes(body: str) -> tuple[str, list[int]]:
 
 def fmt_time(dt: datetime) -> str:
     return dt.strftime("%Y-%m-%d %H:%M:%S")
+
+
+# Matches any "word" character: letters, digits, underscore.
+# In Python's re module, \w is Unicode-aware by default, so it covers
+# Bangla/Arabic/Cyrillic/etc. too.
+WORD_CHAR_RE = re.compile(r"\w")
+
+
+def has_meaningful_body(body: str) -> bool:
+    """True if body has at least one letter/digit character.
+
+    Rejects bodies that are only whitespace, only >, only >>123, etc.
+    """
+    return bool(WORD_CHAR_RE.search(body or ""))

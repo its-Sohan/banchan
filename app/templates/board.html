@@ -15,11 +15,12 @@
 
 <section class="postform">
   <h2>Start a new thread</h2>
+  {% if error %}<p class="form-error">{{ error }}</p>{% endif %}
   <form action="/thread/new" method="post" enctype="multipart/form-data">
     <input type="hidden" name="slug" value="{{ board.slug }}">
-    <label>Name <input type="text" name="name" maxlength="50" placeholder="Anonymous"></label>
-    <label>Subject <input type="text" name="subject" maxlength="100"></label>
-    <textarea name="body" rows="4" placeholder="Post content (supports >>123 quotes)"></textarea>
+    <label>Name <input type="text" name="name" maxlength="50" placeholder="Anonymous" value="{{ form.name if form else '' }}"></label>
+    <label>Subject <input type="text" name="subject" maxlength="100" value="{{ form.subject if form else '' }}"></label>
+    <textarea name="body" rows="4" placeholder="Post content (supports >>123 quotes)">{{ form.body if form else '' }}</textarea>
     <label>Image <input type="file" name="image" accept="image/*"></label>
     <button type="submit">Post</button>
   </form>
