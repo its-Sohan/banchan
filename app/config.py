@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     site_name: str = "Banchan"
     secret_key: str = "dev-only-change-me"
 
-    seed_boards: str = "b,g,tech"
+    seed_boards: str = "b,g,tech,a,mu,lit,sci,sp,v,int"
 
     # Derived
     @property
