@@ -2,19 +2,15 @@
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
-from pathlib import Path
 
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse
+from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
-from starlette.middleware import Middleware
-from starlette.middleware.base import BaseHTTPMiddleware
 
 from app import repositories as repo
 from app.config import settings
 from app.db import close_pool, init_pool
-from app.util import fmt_time, parse_quotes
+from app.templates import templates
 
 from app.routers import boards, threads
 
@@ -27,9 +23,6 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title=settings.site_name, lifespan=lifespan, debug=settings.debug)
-
-templates = Jinja2Templates(directory=str(settings.templates_dir))
-templates.env.filters["fmt_time"] = fmt_time
 
 # Static + uploads
 app.mount("/static", StaticFiles(directory=str(settings.static_dir)), name="static")

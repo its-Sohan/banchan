@@ -3,14 +3,13 @@ from __future__ import annotations
 
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
 
 from app import repositories as repo
 from app.config import settings
+from app.templates import templates
 from app.util import parse_quotes
 
 router = APIRouter()
-templates = Jinja2Templates(directory=str(settings.templates_dir))
 
 THREADS_PER_PAGE = 10
 

@@ -3,14 +3,13 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Form, HTTPException, Request, UploadFile
 from fastapi.responses import RedirectResponse
-from fastapi.templating import Jinja2Templates
 
 from app import repositories as repo
 from app.config import settings
+from app.templates import templates
 from app.util import ImageError, parse_quotes, save_upload
 
 router = APIRouter(prefix="/thread")
-templates = Jinja2Templates(directory=str(settings.templates_dir))
 
 MAX_BODY = 2000
 MAX_SUBJECT = 100
