@@ -25,16 +25,13 @@ services:
       UPLOAD_DIR: /app/uploads
       SECRET_KEY: ${SECRET_KEY:-dev-only-change-me}
       DEBUG: "true"
+      PORT: "8000"
     ports:
       - "8000:8000"
     volumes:
       - ./uploads:/app/uploads
       - ./sql:/app/sql:ro
       - ./scripts:/app/scripts:ro
-    command: >
-      sh -c "python scripts/init_db.py &&
-             python scripts/seed.py &&
-             uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
 
 volumes:
   dbdata:
