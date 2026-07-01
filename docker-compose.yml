@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: banchan
+      POSTGRES_PASSWORD: banchan
+      POSTGRES_DB: banchan
+    ports:
+      - "5432:5432"
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U banchan -d banchan"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://banchan:banchan@db:5432/banchan
+      UPLOAD_DIR: /app/uploads
+      SECRET_KEY: ${SECRET_KEY:-dev-only-change-me}
+      DEBUG: "true"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./uploads:/app/uploads
+      - ./sql:/app/sql:ro
+      - ./scripts:/app/scripts:ro
+    command: >
+      sh -c "python scripts/init_db.py &&
+             python scripts/seed.py &&
+             uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+
+volumes:
+  dbdata:

@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# Uploads (keep dir, ignore contents)
+uploads/originals/*
+uploads/thumbs/*
+!uploads/originals/.gitkeep
+!uploads/thumbs/.gitkeep
+
+# Editor / OS
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# Testing
+.pytest_cache/
+.ruff_cache/

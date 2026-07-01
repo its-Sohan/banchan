@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}/{{ board.slug }}/ &mdash; {{ site_name }}{% endblock %}
+
+{% block nav %}
+  <a href="/">[home]</a>
+  <a href="/{{ board.slug }}/">[index]</a>
+  <a href="/{{ board.slug }}/catalog">[catalog]</a>
+{% endblock %}
+
+{% block content %}
+<section class="board-head">
+  <h1>/{{ board.slug }}/ &mdash; {{ board.name }}</h1>
+  {% if board.description %}<p class="board-desc">{{ board.description }}</p>{% endif %}
+</section>
+
+<section class="postform">
+  <h2>Start a new thread</h2>
+  <form action="/thread/new" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="slug" value="{{ board.slug }}">
+    <label>Name <input type="text" name="name" maxlength="50" placeholder="Anonymous"></label>
+    <label>Subject <input type="text" name="subject" maxlength="100"></label>
+    <textarea name="body" rows="4" placeholder="Post content (supports >>123 quotes)"></textarea>
+    <label>Image <input type="file" name="image" accept="image/*"></label>
+    <button type="submit">Post</button>
+  </form>
+</section>
+
+<section class="threads">
+  {% for t in threads %}
+    <article class="thread" id="t{{ t.id }}">
+      <header class="thread-meta">
+        <span class="thread-id">Thread #{{ t.id }}</span>
+        {% if t.subject %}<span class="subject">{{ t.subject }}</span>{% endif %}
+        <span class="replies">{{ t.post_count }} posts</span>
+        <span class="bumped">bumped {{ t.bumped_at | fmt_time }}</span>
+        <a class="open" href="/thread/{{ t.id }}">[open]</a>
+      </header>
+      <div class="op">
+        {% if t.op_thumb %}
+          <a class="thumb" href="/uploads/originals/{{ t.op_image }}">
+            <img src="/uploads/{{ t.op_thumb }}" alt="{{ t.op_image_name or '' }}">
+          </a>
+        {% endif %}
+        <span class="author">{{ t.op_name or 'Anonymous' }}</span>
+        <div class="body">{{ t.op_body_html | safe }}</div>
+      </div>
+    </article>
+  {% else %}
+    <p class="empty">No threads yet. Be the first to post.</p>
+  {% endfor %}
+</section>
+
+<nav class="pagination">
+  {% if page > 1 %}<a href="?page={{ page - 1 }}">&laquo; prev</a>{% endif %}
+  <span>page {{ page }} / {{ pages }}</span>
+  {% if page < pages %}<a href="?page={{ page + 1 }}">next &raquo;</a>{% endif %}
+</nav>
+{% endblock %}

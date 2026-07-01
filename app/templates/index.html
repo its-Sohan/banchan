@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}{{ site_name }} &middot; Boards{% endblock %}
+
+{% block content %}
+<section class="board-list">
+  <h1>Boards</h1>
+  <ul class="boards">
+    {% for b in boards %}
+      <li>
+        <a class="board-slug" href="/{{ b.slug }}/">/{{ b.slug }}/</a>
+        <span class="board-name">{{ b.name }}</span>
+        {% if b.description %}<span class="board-desc">&mdash; {{ b.description }}</span>{% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}

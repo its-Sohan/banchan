@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}/{{ board.slug }}/catalog &mdash; {{ site_name }}{% endblock %}
+
+{% block nav %}
+  <a href="/">[home]</a>
+  <a href="/{{ board.slug }}/">[index]</a>
+  <a href="/{{ board.slug }}/catalog">[catalog]</a>
+{% endblock %}
+
+{% block content %}
+<section class="board-head">
+  <h1>/{{ board.slug }}/ &mdash; catalog</h1>
+</section>
+
+<section class="catalog">
+  {% for t in threads %}
+    <a class="card" href="/thread/{{ t.id }}">
+      {% if t.op_thumb %}
+        <img src="/uploads/{{ t.op_thumb }}" alt="">
+      {% else %}
+        <div class="card-noimg">no image</div>
+      {% endif %}
+      <div class="card-meta">
+        <span class="card-replies">{{ t.post_count }}R</span>
+        {% if t.subject %}<span class="card-subject">{{ t.subject }}</span>{% endif %}
+      </div>
+      <div class="card-body">{{ t.op_body_html | safe }}</div>
+    </a>
+  {% else %}
+    <p class="empty">No threads.</p>
+  {% endfor %}
+</section>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Thread #{{ thread.id }} &mdash; {{ site_name }}{% endblock %}
+
+{% block nav %}
+  <a href="/">[home]</a>
+  <a href="/{{ thread.board_slug }}/">[/{{ thread.board_slug }}/]</a>
+  <a href="/{{ thread.board_slug }}/catalog">[catalog]</a>
+{% endblock %}
+
+{% block content %}
+<section class="thread-head">
+  <h1>Thread #{{ thread.id }}
+    {% if thread.subject %}&mdash; <span class="subject">{{ thread.subject }}</span>{% endif %}
+    {% if thread.is_sticky %}<span class="tag">sticky</span>{% endif %}
+    {% if thread.is_locked %}<span class="tag">locked</span>{% endif %}
+  </h1>
+  <p class="meta">{{ thread.post_count }} posts &middot; created {{ thread.created_at | fmt_time }} &middot; bumped {{ thread.bumped_at | fmt_time }}</p>
+</section>
+
+<section class="posts">
+  {% for p in posts %}
+    <article class="post" id="p{{ p.id }}">
+      <header class="post-meta">
+        <span class="post-id">No.{{ p.id }}</span>
+        {% if p.is_op %}<span class="tag">OP</span>{% endif %}
+        <span class="author">{{ p.author_name }}</span>
+        <time>{{ p.created_at | fmt_time }}</time>
+        {% if p.backlinks %}
+          <span class="backlinks">Replies:
+            {% for bl in p.backlinks %}<a class="quote" href="#p{{ bl }}">&gt;&gt;{{ bl }}</a>{% endfor %}
+          </span>
+        {% endif %}
+      </header>
+      <div class="post-body">
+        {% if p.thumb %}
+          <a class="thumb" href="/uploads/originals/{{ p.image }}">
+            <img src="/uploads/{{ p.thumb }}" alt="{{ p.image_name or '' }}">
+          </a>
+        {% endif %}
+        <div class="body">{{ p.body_html | safe }}</div>
+      </div>
+    </article>
+  {% endfor %}
+</section>
+
+{% if not thread.is_locked %}
+<section class="postform">
+  <h2>Reply</h2>
+  <form action="/thread/{{ thread.id }}/reply" method="post" enctype="multipart/form-data">
+    <label>Name <input type="text" name="name" maxlength="50" placeholder="Anonymous"></label>
+    <textarea name="body" rows="4" placeholder="Reply (>>123 to quote)"></textarea>
+    <label>Image <input type="file" name="image" accept="image/*"></label>
+    <button type="submit">Reply</button>
+  </form>
+</section>
+{% else %}
+<p class="locked-note">This thread is locked. No new replies.</p>
+{% endif %}
+{% endblock %}
