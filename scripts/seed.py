@@ -12,16 +12,16 @@ from app.config import settings
 # slug -> (display name, description)
 # Descriptions are in Bangla (Bengali) and English mixed for accessibility.
 DEFAULTS = {
-    "random":    ("Random",     "Fao pachal thread."),
-    "tech": ("Tech",           "Pojukti alap"),
-    "cartoon":    ("Anime & Manga",  "katun"),
-    "gaan":   ("Music",          "Gaan"),
-    "golpo":  ("Literature",     "Leha pora "),
-    "biggan":  ("Science",        "Big-GAYAN alap"),
-    "rajniti":   ("Rajniti",         "Folitics er alap"),
-    "games":    ("Video Games",    "Gamisssss"),
-    "antor-jatik":  ("International"   "Bidesher alap"),
-    "sundoori":  ("Sundoori"   "Sundor Cute-Cute meye "),
+    "b":    ("Random",         "যেকোনো কিছু — বিষয় নির্বিশেষে আলোচনা"),
+    "g":    ("Technology",     "প্রযুক্তি — হার্ডওয়্যার, সফটওয়্যার, প্রোগ্রামিং"),
+    "tech": ("Tech",           "প্রযুক্তি আলোচনা"),
+    "a":    ("Anime & Manga",  "অ্যানিম ও মাঙ্গা — জাপানি কার্টুন ও কমিক"),
+    "mu":   ("Music",          "সঙ্গীত — শিল্পী, অ্যালবাম, গান"),
+    "lit":  ("Literature",     "সাহিত্য ও বই — কবিতা, গল্প, উপন্যাস"),
+    "sci":  ("Science",        "বিজ্ঞান ও গবেষণা — পদার্থবিদ্যা, জীববিদ্যা, মহাকাশ"),
+    "sp":   ("Sports",         "খেলাধুলা — ক্রিকেট, ফুটবল, অন্যান্য"),
+    "v":    ("Video Games",    "ভিডিও গেমস — গেমিং, কনসোল, PC"),
+    "int":  ("International",  "আন্তর্জাতিক — বিশ্ব সংবাদ ও সংস্কৃতি"),
 }
 
 
