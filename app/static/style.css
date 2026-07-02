@@ -133,3 +133,35 @@ h2 { font-size: 1rem; margin: 0.5rem 0; }
   font-size: 0.78rem; max-height: 4.5em; overflow: hidden;
   border-top: 1px dashed var(--border); padding-top: 0.3rem;
 }
+
+/* News Banner / Ad Space */
+.news-banner {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  min-height: 220px; /* ~2.5 inches of height on typical screens */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+}
+
+.banner-title {
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+}
+
+.banner-content {
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: var(--text);
+  max-width: 650px;
+}
