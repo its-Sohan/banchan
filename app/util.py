@@ -7,7 +7,7 @@ from datetime import datetime
 from pathlib import Path
 
 from fastapi import UploadFile
-from PIL import Image
+from PIL import Image, ImageSequence
 
 from app.config import settings
 
@@ -53,11 +53,31 @@ async def save_upload(upload: UploadFile) -> dict:
     try:
         with Image.open(originals / filename) as img:
             width, height = img.size
-            img.thumbnail((THUMB_MAX, THUMB_MAX))
             thumbs = settings.thumbs_path
             thumbs.mkdir(parents=True, exist_ok=True)
-            thumb_name = f"{Path(filename).stem}_t.png"
-            img.save(thumbs / thumb_name, format="PNG")
+            
+            if upload.content_type == "image/gif":
+                thumb_name = f"{Path(filename).stem}_t.gif"
+                frames = []
+                for frame in ImageSequence.Iterator(img):
+                    frame_copy = frame.copy()
+                    frame_copy.thumbnail((THUMB_MAX, THUMB_MAX))
+                    frames.append(frame_copy)
+                
+                frames[0].save(
+                    thumbs / thumb_name,
+                    format="GIF",
+                    save_all=True,
+                    append_images=frames[1:],
+                    loop=img.info.get("loop", 0),
+                    duration=img.info.get("duration", 100),
+                    disposal=2
+                )
+            else:
+                img.thumbnail((THUMB_MAX, THUMB_MAX))
+                thumb_name = f"{Path(filename).stem}_t.png"
+                img.save(thumbs / thumb_name, format="PNG")
+                
             thumb_rel = f"thumbs/{thumb_name}"
     except Exception as e:  # noqa: BLE001
         raise ImageError(f"Could not process image: {e}") from e
