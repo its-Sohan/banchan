@@ -1,84 +1,37 @@
 # banchan
 
-A small 4chan-style image/text board. FastAPI + Postgres + server-rendered Jinja2 templates.
+A small 4chan-style image/text board. To talk shit and real. 
 
-## What it does (MVP)
+## What it does
+Social media sucks, amgo ekta opensource news ar alap er platform dorkar onk. No algorithms spoon-feeding you engagement bait, no vanity clout-chasing, and absolutely zero corporate hand-holding. Just a raw, anonymous space to say what you actually think. Start threads, dump images, talk trash, share news, and argue with strangers. Unfiltered, fast, and completely free of social media brainrot.
 
-- Multiple boards by slug (`/b/`, `/g/`, ...)
-- Create a thread (OP) with optional subject + optional image
-- Reply to a thread with optional image
-- Bump-ordered thread index, paginated
-- Catalog grid view per board
-- `>>123` quote parsing with clickable links + backlinks ("Replies: >>N")
-- Greentext (`>like this`)
-- Image upload with auto-generated thumbnails (Pillow)
-- Timestamps on every post; `post_log` table for audit events (create/reply)
-
-## Stack
-
-- **Backend:** FastAPI (async), `asyncpg` (raw SQL, no ORM)
-- **DB:** Postgres 16
-- **Frontend:** Jinja2 templates + a single CSS file + a sprinkle of vanilla JS (none yet)
-- **Images:** local filesystem under `uploads/` (originals + thumbs)
-
-## Run with Docker (easiest)
-
-```bash
-cp .env.example .env
-docker compose up --build
-```
-
-Then open <http://localhost:8000>. On startup the app applies `sql/schema.sql`
-and seeds the boards from `SEED_BOARDS` (default `b,g,tech`).
-
-## Run locally (without Docker)
-
-```bash
-python -m venv .venv && source .venv/bin/activate
-pip install -e ".[dev]"
-
-# start postgres (or use docker compose up db)
-docker compose up -d db
-
-# apply schema + seed
-python scripts/init_db.py
-python scripts/seed.py
-
-# run the app
-uvicorn app.main:app --reload
-```
-
-## Endpoints
-
-| Method | Path                       | Purpose                       |
-|--------|----------------------------|-------------------------------|
-| GET    | `/`                        | Board list                    |
-| GET    | `/{slug}/`                 | Board thread index (paginated)|
-| GET    | `/{slug}/catalog`          | Catalog grid                  |
-| GET    | `/thread/{id}`             | Thread + replies              |
-| POST   | `/thread/new`              | Create thread (multipart)     |
-| POST   | `/thread/{id}/reply`       | Reply (multipart)             |
-| GET    | `/uploads/...`             | Uploaded images               |
-| GET    | `/healthz`                 | Health check                  |
-
-## Schema overview
-
-`boards` 1--* `threads` 1--* `posts` *--1 `images`
-`post_log` is an append-only audit table of post events.
-
-See `sql/schema.sql`.
-
-## Not in MVP (but schema-ready)
-
-- User accounts / tripcodes (currently anonymous + optional `Name` field)
-- Moderator/janitor tiers and post deletion UI
-- Auto-prune of old threads (bump logic exists; prune is a cron/trigger away)
-- Search
-- `tripcode` parsing (`name#secret` -> hashed trip)
+## Rules?
+THERE ARE NO RULES. 
+(Well, almost none. We don't want the feds or hosters shutting us down, so use common sense):
+1. **No illegal shit.** Keep the site online.
+2. **No spamming or botting.** If you want to pitch crypto or sell products, do it on Twitter.
+3. **Grow a spine.** People will talk trash. If you get offended easily, go back to your algorithmic feed. No crying.
 
 ## Development
 
+Get the board running locally:
+
 ```bash
-ruff check .          # lint
-pytest                # tests (see tests/)
+# 1. Clone & set up env
+cp .env.example .env
+
+# 2. Spin up the DB and app via Docker
+docker-compose up --build
 ```
+
+Or run it with a local python env:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -e .
+# Set up database, run migrations/seeding
+python scripts/seed.py
+uvicorn app.main:app --reload
+```
+
